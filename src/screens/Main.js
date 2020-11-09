@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // import screens
+import Root from './Root';
 import Home from './Home';
 import Detail from './Detail';
 
@@ -14,6 +15,11 @@ export default function Main() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Root"
+          component={Root}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Public_Home"
           component={Home}
