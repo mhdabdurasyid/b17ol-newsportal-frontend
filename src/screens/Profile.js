@@ -16,10 +16,15 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 // import default avatar
 import User from '../assets/img/avatar.png';
 
-export default function Profile() {
+export default function Profile({ navigation }) {
+  function editProfile() {
+    navigation.navigate('Edit_Profile');
+  }
+
   return (
     <Container>
       <Content style={styles.padding}>
+        <Text style={[styles.bold, styles.header]}>My Profile</Text>
         <View style={styles.user}>
           <Thumbnail source={User} style={styles.avatar} />
           <View>
@@ -27,7 +32,7 @@ export default function Profile() {
               Muhammad Abdurasyid
             </Text>
             <Text style={styles.fontSize_14}>tester@mail.com</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={editProfile}>
               <Icon
                 type="MaterialIcons"
                 name="edit"
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
   padding: {
     paddingLeft: 24,
     paddingRight: 24,
-    paddingTop: 50,
+    paddingTop: 24,
     paddingBottom: 20,
   },
   fontSize_14: {
@@ -82,5 +87,9 @@ const styles = StyleSheet.create({
   },
   listMargin: {
     marginTop: 50,
+  },
+  header: {
+    fontSize: 24,
+    marginBottom: 24,
   },
 });
