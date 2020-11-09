@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: '#2395FF',
     marginTop: 32,
+    marginBottom: 20,
   },
   white: {
     color: 'white',

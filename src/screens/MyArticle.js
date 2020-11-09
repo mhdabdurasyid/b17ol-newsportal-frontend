@@ -19,6 +19,10 @@ export default function MyArticle({ navigation }) {
     navigation.navigate('Detail');
   }
 
+  function editArticle() {
+    navigation.navigate('Edit_Article');
+  }
+
   return (
     <Container style={styles.parent}>
       <View>
@@ -33,7 +37,7 @@ export default function MyArticle({ navigation }) {
       <Content>
         <View style={styles.card}>
           <View style={[styles.action, styles.padding]}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={editArticle}>
               <Text style={[styles.fontSize_14, styles.bold, styles.blue]}>
                 Update
               </Text>

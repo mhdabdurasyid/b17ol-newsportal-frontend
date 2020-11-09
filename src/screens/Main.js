@@ -13,6 +13,7 @@ import Home from './Home';
 import Detail from './Detail';
 import PostArticle from './PostArticle';
 import MyArticle from './MyArticle';
+import EditArticle from './EditArticle';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -118,6 +119,11 @@ export default function Main() {
             <MainStack.Screen
               name="Detail"
               component={Detail}
+              options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+              name="Edit_Article"
+              component={EditArticle}
               options={{ headerShown: false }}
             />
           </MainStack.Navigator>
