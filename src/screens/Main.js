@@ -14,6 +14,7 @@ import Detail from './Detail';
 import PostArticle from './PostArticle';
 import MyArticle from './MyArticle';
 import EditArticle from './EditArticle';
+import Profile from './Profile';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -70,6 +71,20 @@ function PrivateStackScreen() {
             />
           ),
           title: 'My Article',
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: (focused, color, size) => (
+            <Icon
+              type="MaterialIcons"
+              name="person"
+              size={size}
+              color={color}
+            />
+          ),
         }}
       />
     </Tab.Navigator>
