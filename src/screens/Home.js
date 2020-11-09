@@ -10,7 +10,7 @@ import {
   Icon,
   Button,
 } from 'native-base';
-import {Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 // import default avatar
 import User from '../assets/img/avatar.png';
@@ -18,7 +18,11 @@ import User from '../assets/img/avatar.png';
 // import dummy image
 import Dummy from '../assets/img/home.jpeg';
 
-export default function Home({navigation}) {
+export default function Home({ navigation }) {
+  function readNewsDetail() {
+    navigation.navigate('Detail');
+  }
+
   return (
     <Container style={styles.parent}>
       <View>
@@ -43,7 +47,7 @@ export default function Home({navigation}) {
           </View>
           <Image source={Dummy} style={styles.newsImage} />
           <View style={styles.padding}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={readNewsDetail}>
               <Text style={[styles.bold, styles.marginBottom_8]}>
                 Liga Inggris: James Rodriguez Buka-bukaan Alasan Pernah Tolak
                 Gabung Manchester United
@@ -192,5 +196,6 @@ const styles = StyleSheet.create({
   },
   pageBtn: {
     borderRadius: 100,
+    backgroundColor: '#2395FF',
   },
 });

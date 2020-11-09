@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // import screens
 import Home from './Home';
+import Detail from './Detail';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -16,6 +17,11 @@ export default function Main() {
         <Stack.Screen
           name="Public_Home"
           component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Detail"
+          component={Detail}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
