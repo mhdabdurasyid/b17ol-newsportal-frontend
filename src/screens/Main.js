@@ -11,6 +11,7 @@ import Register from './Register';
 import Login from './Login';
 import Home from './Home';
 import Detail from './Detail';
+import MyArticle from './MyArticle';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -37,6 +38,21 @@ function PrivateStackScreen() {
             />
           ),
           title: 'Home',
+        }}
+      />
+      <Tab.Screen
+        name="My_Article"
+        component={MyArticle}
+        options={{
+          tabBarIcon: (focused, color, size) => (
+            <Icon
+              type="MaterialIcons"
+              name="subject"
+              size={size}
+              color={color}
+            />
+          ),
+          title: 'My Article',
         }}
       />
     </Tab.Navigator>
