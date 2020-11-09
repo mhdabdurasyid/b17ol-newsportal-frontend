@@ -11,6 +11,7 @@ import Register from './Register';
 import Login from './Login';
 import Home from './Home';
 import Detail from './Detail';
+import PostArticle from './PostArticle';
 import MyArticle from './MyArticle';
 
 // import navigator
@@ -38,6 +39,21 @@ function PrivateStackScreen() {
             />
           ),
           title: 'Home',
+        }}
+      />
+      <Tab.Screen
+        name="Post_Article"
+        component={PostArticle}
+        options={{
+          tabBarIcon: (focused, color, size) => (
+            <Icon
+              type="MaterialIcons"
+              name="add-circle"
+              size={size}
+              color={color}
+            />
+          ),
+          title: 'Article',
         }}
       />
       <Tab.Screen

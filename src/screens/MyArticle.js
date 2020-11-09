@@ -14,7 +14,7 @@ import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 // import dummy image
 import Dummy from '../assets/img/home.jpeg';
 
-export default function Home({ navigation }) {
+export default function MyArticle({ navigation }) {
   function readNewsDetail() {
     navigation.navigate('Detail');
   }
