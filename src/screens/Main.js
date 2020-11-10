@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
+import { useSelector } from 'react-redux';
 
 // import screens
 import Root from './Root';
@@ -93,11 +94,11 @@ function PrivateStackScreen() {
 }
 
 export default function Main() {
-  const isLogin = true;
+  const auth = useSelector(state => state.auth);
 
   return (
     <NavigationContainer>
-      {!isLogin ? (
+      {!auth.isLogin ? (
         <Stack.Navigator>
           <Stack.Screen
             name="Root"

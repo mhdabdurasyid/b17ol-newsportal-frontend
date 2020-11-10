@@ -1,9 +1,25 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, Button, Item, Input, Icon } from 'native-base';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
+
+// import actions
+import loginAction from '../redux/actions/auth';
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  function doLogin() {
+    const data = {
+      email,
+      password,
+    };
+    dispatch(loginAction.login(data));
+  }
+
   return (
     <View style={styles.padding}>
       <Text style={[styles.center, styles.bold, styles.marginBottom]}>
@@ -14,7 +30,11 @@ export default function Login() {
       </Text>
       <Item style={styles.marginBottom}>
         <Icon type="MaterialIcons" name="email" style={styles.blue} />
-        <Input placeholder="Email" style={styles.fontSize_14} />
+        <Input
+          placeholder="Email"
+          style={styles.fontSize_14}
+          onChangeText={(text) => setEmail(text)}
+        />
       </Item>
       <Item style={styles.marginBottom}>
         <Icon type="MaterialIcons" name="lock" style={styles.blue} />
@@ -22,12 +42,15 @@ export default function Login() {
           placeholder="Password"
           secureTextEntry
           style={styles.fontSize_14}
+          onChangeText={(text) => setPassword(text)}
         />
       </Item>
       <TouchableOpacity style={styles.marginBottom}>
-        <Text style={[styles.fontSize_14, styles.textRight]}>Forgot password?</Text>
+        <Text style={[styles.fontSize_14, styles.textRight]}>
+          Forgot password?
+        </Text>
       </TouchableOpacity>
-      <Button rounded block style={styles.btn}>
+      <Button rounded block style={styles.btn} onPress={doLogin}>
         <Text style={styles.white}>{'  Login  '}</Text>
       </Button>
     </View>
