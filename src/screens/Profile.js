@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 
 // import actions
 import authAction from '../redux/actions/auth';
+import newsAction from '../redux/actions/news';
 
 // import default avatar
 import User from '../assets/img/avatar.png';
@@ -29,6 +30,7 @@ export default function Profile({ navigation }) {
 
   function logout() {
     dispatch(authAction.logout());
+    dispatch(newsAction.destroy());
   }
 
   return (

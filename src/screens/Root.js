@@ -2,12 +2,19 @@
 import React from 'react';
 import { Text, Button } from 'native-base';
 import { Image, View, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+
+// import actions
+import newsAction from '../redux/actions/news';
 
 // import default logo
 import Logo from '../assets/img/logo.png';
 
 export default function Root({ navigation }) {
+  const dispatch = useDispatch();
+
   function goToHome() {
+    dispatch(newsAction.destroy());
     navigation.navigate('Public_Home');
   }
 

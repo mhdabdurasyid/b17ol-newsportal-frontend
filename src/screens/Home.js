@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Container,
   Content,
@@ -9,16 +9,26 @@ import {
   Input,
   Icon,
   Button,
+  Spinner,
 } from 'native-base';
 import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { API_URL } from '@env';
+
+// import actions
+import newsAction from '../redux/actions/news';
 
 // import default avatar
 import User from '../assets/img/avatar.png';
 
-// import dummy image
-import Dummy from '../assets/img/home.jpeg';
-
 export default function Home({ navigation }) {
+  const dispatch = useDispatch();
+  const news = useSelector((state) => state.news);
+
+  useEffect(() => {
+    dispatch(newsAction.getAllNews());
+  }, [dispatch]);
+
   function readNewsDetail() {
     navigation.navigate('Detail');
   }
@@ -35,92 +45,48 @@ export default function Home({ navigation }) {
         </Item>
       </View>
       <Content>
-        <View style={styles.card}>
-          <View style={[styles.author, styles.padding]}>
-            <Thumbnail small source={User} style={styles.avatar} />
-            <View>
-              <Text style={[styles.fontSize_12, styles.bold]}>
-                Muhammad Abdurasyid
-              </Text>
-              <Text style={styles.fontSize_12}>1 Nov, 16.00</Text>
-            </View>
-          </View>
-          <Image source={Dummy} style={styles.newsImage} />
-          <View style={styles.padding}>
-            <TouchableOpacity onPress={readNewsDetail}>
-              <Text style={[styles.bold, styles.marginBottom_8]}>
-                Liga Inggris: James Rodriguez Buka-bukaan Alasan Pernah Tolak
-                Gabung Manchester United
-              </Text>
-            </TouchableOpacity>
-            <Text
-              numberOfLines={2}
-              ellipsizeMode="tail"
-              style={styles.fontSize_14}>
-              Bola.com, Liverpool - Striker Everton, James Rodriguez, mengungkap
-              fakta menarik menjelang duel melawan Manchester United di Liga
-              Inggris, Sabtu (7/11/2020) malam.
-            </Text>
-          </View>
-        </View>
-
-        {/* dummy content */}
-        <View style={styles.card}>
-          <View style={[styles.author, styles.padding]}>
-            <Thumbnail small source={User} style={styles.avatar} />
-            <View>
-              <Text style={[styles.fontSize_12, styles.bold]}>
-                Muhammad Abdurasyid
-              </Text>
-              <Text style={styles.fontSize_12}>1 Nov, 16.00</Text>
-            </View>
-          </View>
-          <Image source={Dummy} style={styles.newsImage} />
-          <View style={styles.padding}>
-            <TouchableOpacity>
-              <Text style={[styles.bold, styles.marginBottom_8]}>
-                Liga Inggris: James Rodriguez Buka-bukaan Alasan Pernah Tolak
-                Gabung Manchester United
-              </Text>
-            </TouchableOpacity>
-            <Text
-              numberOfLines={2}
-              ellipsizeMode="tail"
-              style={styles.fontSize_14}>
-              Bola.com, Liverpool - Striker Everton, James Rodriguez, mengungkap
-              fakta menarik menjelang duel melawan Manchester United di Liga
-              Inggris, Sabtu (7/11/2020) malam.
-            </Text>
-          </View>
-        </View>
-        <View style={styles.card}>
-          <View style={[styles.author, styles.padding]}>
-            <Thumbnail small source={User} style={styles.avatar} />
-            <View>
-              <Text style={[styles.fontSize_12, styles.bold]}>
-                Muhammad Abdurasyid
-              </Text>
-              <Text style={styles.fontSize_12}>1 Nov, 16.00</Text>
-            </View>
-          </View>
-          <Image source={Dummy} style={styles.newsImage} />
-          <View style={styles.padding}>
-            <TouchableOpacity>
-              <Text style={[styles.bold, styles.marginBottom_8]}>
-                Liga Inggris: James Rodriguez Buka-bukaan Alasan Pernah Tolak
-                Gabung Manchester United
-              </Text>
-            </TouchableOpacity>
-            <Text
-              numberOfLines={2}
-              ellipsizeMode="tail"
-              style={styles.fontSize_14}>
-              Bola.com, Liverpool - Striker Everton, James Rodriguez, mengungkap
-              fakta menarik menjelang duel melawan Manchester United di Liga
-              Inggris, Sabtu (7/11/2020) malam.
-            </Text>
-          </View>
-        </View>
+        {news.allNewsIsLoading && <Spinner color="#2395FF" />}
+        {news.allNewsData.length > 0 &&
+          news.allNewsData.map((article) => {
+            return (
+              <View style={styles.card} key={article.id}>
+                <View style={[styles.author, styles.padding]}>
+                  <Thumbnail
+                    small
+                    source={
+                      article.Author.photo !== null
+                        ? { uri: `${API_URL}${article.Author.photo}` }
+                        : User
+                    }
+                    style={styles.avatar}
+                  />
+                  <View>
+                    <Text style={[styles.fontSize_12, styles.bold]}>
+                      {article.Author.name}
+                    </Text>
+                    <Text style={styles.fontSize_12}>{article.createdAt}</Text>
+                  </View>
+                </View>
+                <Image
+                  source={{ uri: `${API_URL}${article.image}` }}
+                  style={styles.newsImage}
+                />
+                <View style={styles.padding}>
+                  <TouchableOpacity onPress={readNewsDetail}>
+                    <Text style={[styles.bold, styles.marginBottom_8]}>
+                      {article.title}
+                    </Text>
+                  </TouchableOpacity>
+                  <Text
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                    style={styles.fontSize_14}>
+                    {article.content}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
 
         {/* pagination */}
         <View style={styles.pagination}>
