@@ -4,6 +4,11 @@ const initialState = {
   isError: false,
   token: '',
   alertMsg: '',
+
+  registerIsLoading: false,
+  registerIsError: false,
+  registerAlert: '',
+  isRegister: false,
 };
 
 export default (state = initialState, action) => {
@@ -11,6 +16,10 @@ export default (state = initialState, action) => {
     case 'LOGIN_PENDING': {
       return {
         ...state,
+        registerIsLoading: false,
+        registerIsError: false,
+        registerAlert: '',
+        isRegister: false,
         isLoading: true,
         alertMsg: 'Loggin in. Please wait..',
       };
@@ -31,6 +40,40 @@ export default (state = initialState, action) => {
         isError: false,
         isLogin: true,
         alertMsg: 'Successfully login',
+      };
+    }
+    case 'REGISTER_PENDING': {
+      return {
+        ...state,
+        isLogin: false,
+        isError: false,
+        token: '',
+        alertMsg: '',
+        registerIsLoading: true,
+        registerAlert: 'Register on process. Please wait..',
+      };
+    }
+    case 'REGISTER_REJECTED': {
+      return {
+        ...state,
+        registerIsLoading: false,
+        registerIsError: true,
+        registerAlert: action.payload.response.data.message,
+      };
+    }
+    case 'REGISTER_FULFILLED': {
+      return {
+        ...state,
+        registerIsLoading: false,
+        registerIsError: false,
+        isRegister: true,
+        registerAlert: 'Successfully register',
+      };
+    }
+    case 'RESET_IS_REGISTER': {
+      return {
+        ...state,
+        isRegister: false,
       };
     }
     case 'LOGOUT': {

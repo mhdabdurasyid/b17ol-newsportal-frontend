@@ -10,4 +10,11 @@ export default {
   logout: () => ({
     type: 'LOGOUT',
   }),
+  register: (data) => ({
+    type: 'REGISTER',
+    payload: http().post('/users', qs.stringify(data)),
+  }),
+  resetRegister: () => ({
+    type: 'RESET_IS_REGISTER',
+  }),
 };
