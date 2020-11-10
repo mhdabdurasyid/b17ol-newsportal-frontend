@@ -12,13 +12,23 @@ import {
   ListItem,
 } from 'native-base';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
+
+// import actions
+import authAction from '../redux/actions/auth';
 
 // import default avatar
 import User from '../assets/img/avatar.png';
 
 export default function Profile({ navigation }) {
+  const dispatch = useDispatch();
+
   function editProfile() {
     navigation.navigate('Edit_Profile');
+  }
+
+  function logout() {
+    dispatch(authAction.logout());
   }
 
   return (
@@ -50,7 +60,7 @@ export default function Profile({ navigation }) {
               <Icon type="MaterialIcons" name="arrow-forward" />
             </Right>
           </ListItem>
-          <ListItem>
+          <ListItem onPress={logout}>
             <Left>
               <Text style={styles.bold}>Logout</Text>
             </Left>
