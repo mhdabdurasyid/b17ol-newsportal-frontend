@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Container,
   Content,
@@ -12,17 +12,25 @@ import {
   ListItem,
 } from 'native-base';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { API_URL } from '@env';
 
 // import actions
 import authAction from '../redux/actions/auth';
 import newsAction from '../redux/actions/news';
+import profileAction from '../redux/actions/profile';
 
 // import default avatar
 import User from '../assets/img/avatar.png';
 
 export default function Profile({ navigation }) {
   const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const profile = useSelector((state) => state.profile);
+
+  useEffect(() => {
+    dispatch(profileAction.getProfile(auth.token));
+  }, [auth.token, dispatch]);
 
   function editProfile() {
     navigation.navigate('Edit_Profile');
@@ -31,6 +39,7 @@ export default function Profile({ navigation }) {
   function logout() {
     dispatch(authAction.logout());
     dispatch(newsAction.destroy());
+    dispatch(profileAction.destroy());
   }
 
   return (
@@ -38,12 +47,21 @@ export default function Profile({ navigation }) {
       <Content style={styles.padding}>
         <Text style={[styles.bold, styles.header]}>My Profile</Text>
         <View style={styles.user}>
-          <Thumbnail source={User} style={styles.avatar} />
+          <Thumbnail
+            source={
+              profile.profileData.photo !== null
+                ? { uri: `${API_URL}${profile.profileData.photo}` }
+                : User
+            }
+            style={styles.avatar}
+          />
           <View>
             <Text style={[styles.fontSize_14, styles.bold]}>
-              Muhammad Abdurasyid
+              {profile.profileData.name}
             </Text>
-            <Text style={styles.fontSize_14}>tester@mail.com</Text>
+            <Text style={styles.fontSize_14}>
+              {profile.profileData.email}
+            </Text>
             <TouchableOpacity onPress={editProfile}>
               <Icon
                 type="MaterialIcons"
