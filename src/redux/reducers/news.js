@@ -4,6 +4,11 @@ const initialState = {
   allNewsIsLoading: false,
   allNewsIsError: false,
   allNewsAlertMsg: '',
+
+  newsDetailData: {},
+  newsDetailIsLoading: false,
+  newsDetailIsError: false,
+  newsDetailAlertMsg: '',
 };
 
 export default (state = initialState, action) => {
@@ -28,6 +33,37 @@ export default (state = initialState, action) => {
         allNewsIsLoading: false,
         allNewsIsError: false,
         allNewsData: action.payload.data.result,
+      };
+    }
+    case 'GET_NEWS_DETAIL_PENDING': {
+      return {
+        ...state,
+        newsDetailIsLoading: true,
+      };
+    }
+    case 'GET_NEWS_DETAIL_REJECTED': {
+      return {
+        ...state,
+        newsDetailIsLoading: false,
+        newsDetailIsError: true,
+        newsDetailAlertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'GET_NEWS_DETAIL_FULFILLED': {
+      return {
+        ...state,
+        newsDetailIsLoading: false,
+        newsDetailIsError: false,
+        newsDetailData: action.payload.data.result,
+      };
+    }
+    case 'RESET_NEWS_DETAIL': {
+      return {
+        ...state,
+        newsDetailData: {},
+        newsDetailIsLoading: false,
+        newsDetailIsError: false,
+        newsDetailAlertMsg: '',
       };
     }
     case 'DESTROY_NEWS': {

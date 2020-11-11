@@ -9,4 +9,11 @@ export default {
     type: 'GET_ALL_NEWS',
     payload: http().get(`news?search=${keyword}`),
   }),
+  getNewsDetail: (id) => ({
+    type: 'GET_NEWS_DETAIL',
+    payload: http().get(`news/${id}`),
+  }),
+  resetNewsDetail: () => ({
+    type: 'RESET_NEWS_DETAIL',
+  }),
 };

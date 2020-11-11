@@ -30,8 +30,9 @@ export default function Home({ navigation }) {
     dispatch(newsAction.getAllNews());
   }, [dispatch]);
 
-  function readNewsDetail() {
-    navigation.navigate('Detail');
+  function readNewsDetail(id) {
+    dispatch(newsAction.resetNewsDetail());
+    navigation.navigate('Detail', { id });
   }
 
   return (
@@ -73,7 +74,7 @@ export default function Home({ navigation }) {
                   style={styles.newsImage}
                 />
                 <View style={styles.padding}>
-                  <TouchableOpacity onPress={readNewsDetail}>
+                  <TouchableOpacity onPress={() => readNewsDetail(article.id)}>
                     <Text style={[styles.bold, styles.marginBottom_8]}>
                       {article.title}
                     </Text>
