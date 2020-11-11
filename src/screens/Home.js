@@ -89,6 +89,11 @@ export default function Home({ navigation }) {
         </Item>
       </View>
       {news.allNewsIsLoading && <Spinner color="#2395FF" />}
+      {(news.allNewsIsError && news.allNewsData.length === 0) && (
+        <View style={styles.isError}>
+          <Text style={styles.padding}>There is no article or news!</Text>
+        </View>
+      )}
       <FlatList
         data={data}
         renderItem={({ item }) => (
@@ -198,5 +203,10 @@ const styles = StyleSheet.create({
   pageBtn: {
     borderRadius: 100,
     backgroundColor: '#2395FF',
+  },
+  isError: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
 });

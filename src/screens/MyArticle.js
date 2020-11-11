@@ -49,7 +49,7 @@ export default function MyArticle({ navigation }) {
   useEffect(() => {
     if (news.isdelete) {
       dispatch(newsAction.getNewsByUser('', auth.token));
-      alert('Successfully delete article..')
+      alert('Successfully delete article..');
       dispatch(newsAction.resetDelete());
     }
   }, [auth.token, dispatch, news.isdelete]);
@@ -98,6 +98,11 @@ export default function MyArticle({ navigation }) {
         </Item>
       </View>
       {news.userNewsIsLoading && <Spinner color="#2395FF" />}
+      {(news.userNewsIsError && news.userNewsData.length === 0) && (
+        <View style={styles.isError}>
+          <Text style={styles.padding}>There is no article or news. Create first!</Text>
+        </View>
+      )}
       <FlatList
         data={data}
         renderItem={({ item }) => (
@@ -205,5 +210,10 @@ const styles = StyleSheet.create({
   red: {
     marginLeft: 16,
     color: '#DB3022',
+  },
+  isError: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
 });
