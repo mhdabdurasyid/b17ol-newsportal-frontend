@@ -21,6 +21,11 @@ const initialState = {
   deleteIsError: false,
   deleteAlert: '',
   isDelete: false,
+
+  editIsLoading: false,
+  editIsError: false,
+  editAlert: '',
+  isEdit: false,
 };
 
 export default (state = initialState, action) => {
@@ -133,6 +138,36 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isdelete: false,
+      };
+    }
+    case 'EDIT_PENDING': {
+      return {
+        ...state,
+        editIsLoading: true,
+        editAlert: 'Editing article on progress. Please wait..',
+      };
+    }
+    case 'EDIT_REJECTED': {
+      return {
+        ...state,
+        editIsLoading: false,
+        editIsError: true,
+        editAlert: action.payload.response.data.message,
+      };
+    }
+    case 'EDIT_FULFILLED': {
+      return {
+        ...state,
+        editIsLoading: false,
+        editIsError: false,
+        isEdit: true,
+        editAlert: 'Successfully edit article',
+      };
+    }
+    case 'RESET_EDIT': {
+      return {
+        ...state,
+        isEdit: false,
       };
     }
     default: {

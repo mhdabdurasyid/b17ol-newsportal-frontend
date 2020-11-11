@@ -27,4 +27,11 @@ export default {
   resetDelete: () => ({
     type: 'RESET_DELETE',
   }),
+  editNews: (id, token, form) => ({
+    type: 'EDIT',
+    payload: http(token).patch(`private/news/${id}`, form),
+  }),
+  resetEdit: () => ({
+    type: 'RESET_EDIT',
+  }),
 };

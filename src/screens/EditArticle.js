@@ -1,15 +1,97 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Content, Text, Item, Input, Button } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { Alert, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { API_URL } from '@env';
+import ImagePicker from 'react-native-image-picker';
 
-export default function EditArticle() {
+// import actions
+import newsAction from '../redux/actions/news';
+
+export default function EditArticle({ route, navigation }) {
+  const { id } = route.params;
+  const dispatch = useDispatch();
+  const news = useSelector((state) => state.news);
+  const auth = useSelector((state) => state.auth);
+
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [image, setImage] = useState('');
+  const [imgData, setImgData] = useState(null);
+
+  useEffect(() => {
+    dispatch(newsAction.getNewsDetail(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (news.newsDetailData) {
+      setTitle(news.newsDetailData.title);
+      setContent(news.newsDetailData.content);
+      setImage(news.newsDetailData.image);
+    }
+  }, [news.newsDetailData]);
+
+  useEffect(() => {
+    if (news.isEdit) {
+      Alert.alert('Edit article successful..');
+      navigation.navigate('My_Article');
+      dispatch(newsAction.resetEdit());
+    }
+  }, [dispatch, navigation, news.isEdit]);
+
+  function selectImage() {
+    let options = {
+      title: 'Select your article image..',
+      maxWidth: 512,
+      maxHeight: 256,
+      mediaType: 'photo',
+      noData: true,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        Alert.alert("You didn't select any image");
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = {
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
+        };
+        setImgData(source);
+        setImage(source.uri);
+      }
+    });
+  }
+
+  function doEditArticle() {
+    const form = new FormData();
+    form.append('title', title);
+    form.append('content', content);
+    if (imgData) {
+      form.append('image', imgData);
+    }
+
+    dispatch(newsAction.editNews(id, auth.token, form));
+  }
+
   return (
     <Container>
       <Content style={styles.padding}>
         <Text style={[styles.bold, styles.header]}>
           Edit your article here.
         </Text>
+        <TouchableOpacity onPress={selectImage}>
+          <Image
+            source={{ uri: !imgData ? `${API_URL}${image}` : image }}
+            style={styles.newsImage}
+          />
+        </TouchableOpacity>
         <Text style={[styles.bold, styles.fontSize_14, styles.marginBottom]}>
           Title
         </Text>
@@ -18,7 +100,8 @@ export default function EditArticle() {
             multiline={true}
             numberOfLines={3}
             style={styles.fontSize_14}
-            value="Liga Inggris: James Rodriguez Buka-bukaan Alasan Pernah Tolak Gabung Manchester United"
+            value={title}
+            onChangeText={(text) => setTitle(text)}
           />
         </Item>
         <Text style={[styles.bold, styles.fontSize_14, styles.marginBottom]}>
@@ -29,10 +112,11 @@ export default function EditArticle() {
             multiline={true}
             numberOfLines={9}
             style={styles.fontSize_14}
-            value='Bola.com, Liverpool - Striker Everton, James Rodriguez, mengungkap fakta menarik menjelang duel melawan Manchester United di Liga Inggris, Sabtu (7/11/2020) malam. Ternyata, ia pernah melewatkan kans pindah ke klub raksasa Inggris tersebut. \n\nManchester United pernah mendekati James Rodriguez delapan tahun lalu, tepatnya pada era Sir Alex Ferguson. Saat itu, ia masih merumput di Porto.\n\nAlih-alih hijrah ke Inggris, James Rodriguez memilih bertahan di Porto, kemudian setahun berselang pindah ke Ligue 1, untuk menerima tawaran Monaco. \n\nPada 2014, ia menjelma menjadi superstar global di Piala Dunia bersama Timnas Kolombia. Setelah itu ia pindah ke Real Madrid pada tahun yang sama. Sayangnya, kariernya bersama El Real tak terlalu moncer. \n\nPemain berusia 29 tahun itu kini bereuni dengan Carlo Ancelotti di Everton dan kembali menemukan performa apiknya. Rodriguez juga dinyatakan fit dan bisa bermain melawan United, setelah absen pada laga sebelumnya kontra Newcastle United. \n\nMenjelang laga itu, Rodriguez mengenang momen saat Manchester United berusaha merekrutnya pada 2012. \n\n\"Peristiwanya sudah lama sekali, saya yakin pada 2012. Klub telah menawari saya sesuatu, tetapi pada akhirnya tidak terjadi karena suatu alasan yang saya tidak tahu,\" ujar James Rodriguez, seperti dilansir Daily Star.\n\nMeskipun melewatkan peluang gabung Manchester United, James Rodriguez tidak menyesal. Ia merasa memang ditakdirkan untuk klub lain. \n\n\"Jika itu tidak terjadi, maka pasti ada beberapa alasan. Mungkin saya tidak siap (bermain untuk MU), atau mungkin saya memang tercipta untuk bermain dengan tim hebat lainnya,\" ujar Rodriguez. \n\n\"Pada akhirnya saya punya peluang pindah ke Prancis dan itu jalan yang saya tempuh.\" \n\nKetika ditanya apakah pernah bertanya-tanya tentang apa yang bisa terjadi jika bergabung dengan United bertahun-tahun yang lalu, Rodriguez menjawab singkat \"Tidak, tidak juga,\" ujar Rodriguez. \n\n\"Ketika pindah ke Prancis, saya fokus tampil bagus pada tahun itu,\" imbuhnya. \n\nSumber: Daily Star'
+            value={content}
+            onChangeText={(text) => setContent(text)}
           />
         </Item>
-        <Button rounded block style={styles.btn}>
+        <Button rounded block style={styles.btn} onPress={doEditArticle}>
           <Text style={styles.white}>Save Article</Text>
         </Button>
       </Content>
@@ -66,5 +150,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 24,
     marginTop: 16,
+  },
+  newsImage: {
+    resizeMode: 'cover',
+    width: '100%',
+    height: 175,
+    marginBottom: 16,
   },
 });

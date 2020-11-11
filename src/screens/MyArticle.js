@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '@env';
@@ -49,7 +50,7 @@ export default function MyArticle({ navigation }) {
   useEffect(() => {
     if (news.isdelete) {
       dispatch(newsAction.getNewsByUser('', auth.token));
-      alert('Successfully delete article..');
+      Alert.alert('Successfully delete article..');
       dispatch(newsAction.resetDelete());
     }
   }, [auth.token, dispatch, news.isdelete]);
@@ -59,8 +60,9 @@ export default function MyArticle({ navigation }) {
     navigation.navigate('Detail', { id });
   }
 
-  function editArticle() {
-    navigation.navigate('Edit_Article');
+  function editArticle(id) {
+    dispatch(newsAction.resetNewsDetail());
+    navigation.navigate('Edit_Article', { id });
   }
 
   function loadMore() {
@@ -108,7 +110,7 @@ export default function MyArticle({ navigation }) {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <View style={[styles.action, styles.padding]}>
-              <TouchableOpacity onPress={editArticle}>
+              <TouchableOpacity onPress={() => editArticle(item.id)}>
                 <Text style={[styles.fontSize_14, styles.bold, styles.blue]}>
                   Update
                 </Text>
