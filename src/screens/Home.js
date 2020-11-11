@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Content,
@@ -26,9 +26,11 @@ export default function Home({ navigation }) {
   const dispatch = useDispatch();
   const news = useSelector((state) => state.news);
 
+  const [keyword, setKeyword] = useState('');
+
   useEffect(() => {
-    dispatch(newsAction.getAllNews());
-  }, [dispatch]);
+    dispatch(newsAction.getAllNews(keyword));
+  }, [dispatch, keyword]);
 
   function readNewsDetail(id) {
     dispatch(newsAction.resetNewsDetail());
@@ -42,6 +44,8 @@ export default function Home({ navigation }) {
           <Input
             placeholder="Search"
             style={[styles.fontSize_14, styles.padding]}
+            value={keyword}
+            onChangeText={(text) => setKeyword(text)}
           />
           <Icon type="MaterialIcons" name="search" style={styles.padding} />
         </Item>
