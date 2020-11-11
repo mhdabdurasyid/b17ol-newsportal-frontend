@@ -34,4 +34,11 @@ export default {
   resetEdit: () => ({
     type: 'RESET_EDIT',
   }),
+  postNews: (form, token) => ({
+    type: 'POST',
+    payload: http(token).post('private/news', form),
+  }),
+  resetPost: () => ({
+    type: 'RESET_POST',
+  }),
 };

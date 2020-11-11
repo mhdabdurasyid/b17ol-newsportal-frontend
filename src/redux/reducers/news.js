@@ -26,6 +26,11 @@ const initialState = {
   editIsError: false,
   editAlert: '',
   isEdit: false,
+
+  postIsLoading: false,
+  postIsError: false,
+  postAlert: '',
+  isPost: false,
 };
 
 export default (state = initialState, action) => {
@@ -168,6 +173,36 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isEdit: false,
+      };
+    }
+    case 'POST_PENDING': {
+      return {
+        ...state,
+        postIsLoading: true,
+        postAlert: 'Creating article on progress. Please wait..',
+      };
+    }
+    case 'POST_REJECTED': {
+      return {
+        ...state,
+        postIsLoading: false,
+        postIsError: true,
+        postAlert: action.payload.response.data.message,
+      };
+    }
+    case 'POST_FULFILLED': {
+      return {
+        ...state,
+        postIsLoading: false,
+        postIsError: false,
+        isPost: true,
+        postAlert: 'Successfully create new article',
+      };
+    }
+    case 'RESET_POST': {
+      return {
+        ...state,
+        isPost: false,
       };
     }
     default: {
