@@ -14,6 +14,7 @@ import {
 import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '@env';
+import dayjs from 'dayjs';
 
 // import actions
 import newsAction from '../redux/actions/news';
@@ -64,7 +65,7 @@ export default function Home({ navigation }) {
                     <Text style={[styles.fontSize_12, styles.bold]}>
                       {article.Author.name}
                     </Text>
-                    <Text style={styles.fontSize_12}>{article.createdAt}</Text>
+                    <Text style={styles.fontSize_12}>{dayjs(article.createdAt).format('D MMM YYYY HH.mm')}</Text>
                   </View>
                 </View>
                 <Image
