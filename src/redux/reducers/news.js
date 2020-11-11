@@ -16,6 +16,11 @@ const initialState = {
   userNewsIsLoading: false,
   userNewsIsError: false,
   userNewsAlertMsg: '',
+
+  deleteIsLoading: false,
+  deleteIsError: false,
+  deleteAlert: '',
+  isDelete: false,
 };
 
 export default (state = initialState, action) => {
@@ -98,6 +103,36 @@ export default (state = initialState, action) => {
         userNewsIsError: false,
         userNewsData: action.payload.data.result,
         userNewsPageInfo: action.payload.data.pageInfo,
+      };
+    }
+    case 'DELETE_PENDING': {
+      return {
+        ...state,
+        deleteIsLoading: true,
+        deleteAlert: 'Delete on progress. Please wait..',
+      };
+    }
+    case 'DELETE_REJECTED': {
+      return {
+        ...state,
+        deleteIsLoading: false,
+        deleteIsError: true,
+        deleteAlert: action.payload.response.data.message,
+      };
+    }
+    case 'DELETE_FULFILLED': {
+      return {
+        ...state,
+        deleteIsLoading: false,
+        deleteIsError: false,
+        isdelete: true,
+        deleteAlert: 'Successfully delete article',
+      };
+    }
+    case 'RESET_DELETE': {
+      return {
+        ...state,
+        isdelete: false,
       };
     }
     default: {

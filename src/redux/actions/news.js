@@ -20,4 +20,11 @@ export default {
     type: 'GET_USER_NEWS',
     payload: http(token).get(`private/news?search=${keyword}&page=${page}`),
   }),
+  deleteNews: (id, token) => ({
+    type: 'DELETE',
+    payload: http(token).delete(`private/news/${id}`),
+  }),
+  resetDelete: () => ({
+    type: 'RESET_DELETE',
+  }),
 };

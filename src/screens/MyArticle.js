@@ -46,6 +46,14 @@ export default function MyArticle({ navigation }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [news.userNewsData]);
 
+  useEffect(() => {
+    if (news.isdelete) {
+      dispatch(newsAction.getNewsByUser('', auth.token));
+      alert('Successfully delete article..')
+      dispatch(newsAction.resetDelete());
+    }
+  }, [auth.token, dispatch, news.isdelete]);
+
   function readNewsDetail(id) {
     dispatch(newsAction.resetNewsDetail());
     navigation.navigate('Detail', { id });
@@ -72,6 +80,10 @@ export default function MyArticle({ navigation }) {
     dispatch(newsAction.getNewsByUser('', auth.token));
   }
 
+  function doDelete(id) {
+    dispatch(newsAction.deleteNews(id, auth.token));
+  }
+
   return (
     <Container style={styles.parent}>
       <View>
@@ -96,7 +108,7 @@ export default function MyArticle({ navigation }) {
                   Update
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => doDelete(item.id)}>
                 <Text style={[styles.fontSize_14, styles.bold, styles.red]}>
                   Delete
                 </Text>
