@@ -10,9 +10,10 @@ import {
   Thumbnail,
   Icon,
 } from 'native-base';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '@env';
+import ImagePicker from 'react-native-image-picker';
 
 // import actions
 import profileAction from '../redux/actions/profile';
@@ -28,10 +29,11 @@ export default function EditProfile({ navigation }) {
   const [name, setName] = useState(profile.profileData.name);
   const [email, setEmail] = useState(profile.profileData.email);
   const [photo, setPhoto] = useState(profile.profileData.photo);
+  const [imgData, setImgData] = useState(null);
 
   useEffect(() => {
     if (profile.isEdit) {
-      alert('Edit profile succesful..');
+      Alert.alert('Edit profile succesful..');
       dispatch(profileAction.resetEdit());
       dispatch(profileAction.getProfile(auth.token));
       navigation.navigate('Profile');
@@ -39,11 +41,43 @@ export default function EditProfile({ navigation }) {
   });
 
   function doEditProfile() {
-    const data = {
-      name,
-      email,
+    const form = new FormData();
+    form.append('email', email);
+    form.append('name', name);
+    if (imgData) {
+      form.append('image', imgData);
+    }
+
+    dispatch(profileAction.editProfile(form, auth.token));
+  }
+
+  function selectImage() {
+    let options = {
+      title: 'Choose your avatar..',
+      maxWidth: 256,
+      maxHeight: 256,
+      mediaType: 'photo',
+      noData: true,
+      storageOptions: {
+        skipBackup: true,
+      },
     };
-    dispatch(profileAction.editProfile(data, auth.token));
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        Alert.alert("You didn't select any image");
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = {
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
+        };
+        setImgData(source);
+        setPhoto(source.uri);
+      }
+    });
   }
 
   return (
@@ -51,9 +85,19 @@ export default function EditProfile({ navigation }) {
       <Content style={styles.padding}>
         <Text style={[styles.bold, styles.header]}>Edit your profile</Text>
         <View style={styles.avatar}>
-          <Thumbnail
-            source={photo !== null ? { uri: `${API_URL}${photo}` } : User}
-          />
+          <TouchableOpacity onPress={selectImage}>
+            <Thumbnail
+              source={
+                photo !== null
+                  ? {
+                    uri: photo.includes('upload')
+                      ? `${API_URL}${photo}`
+                      : photo,
+                  }
+                  : User
+              }
+            />
+          </TouchableOpacity>
         </View>
         <Item style={styles.marginBottom}>
           <Icon type="MaterialIcons" name="person" style={styles.blue} />

@@ -12,9 +12,9 @@ export default {
       payload: http(token).get('/private/users'),
     };
   },
-  editProfile: (data, token) => ({
+  editProfile: (form, token) => ({
     type: 'EDIT_PROFILE',
-    payload: http(token).patch('/private/users', qs.stringify(data)),
+    payload: http(token).patch('/private/users', form),
   }),
   resetEdit: () => ({
     type: 'RESET_EDIT',
