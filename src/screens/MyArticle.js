@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Content,
@@ -8,15 +8,29 @@ import {
   Input,
   Icon,
   Button,
+  Spinner,
 } from 'native-base';
 import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { API_URL } from '@env';
 
-// import dummy image
-import Dummy from '../assets/img/home.jpeg';
+// import actions
+import newsAction from '../redux/actions/news';
 
 export default function MyArticle({ navigation }) {
-  function readNewsDetail() {
-    navigation.navigate('Detail');
+  const dispatch = useDispatch();
+  const news = useSelector((state) => state.news);
+  const auth = useSelector((state) => state.auth);
+
+  const [keyword, setKeyword] = useState('');
+
+  useEffect(() => {
+    dispatch(newsAction.getNewsByUser(keyword, auth.token));
+  }, [auth.token, dispatch, keyword]);
+
+  function readNewsDetail(id) {
+    dispatch(newsAction.resetNewsDetail());
+    navigation.navigate('Detail', { id });
   }
 
   function editArticle() {
@@ -30,106 +44,51 @@ export default function MyArticle({ navigation }) {
           <Input
             placeholder="Search"
             style={[styles.fontSize_14, styles.padding]}
+            value={keyword}
+            onChangeText={(text) => setKeyword(text)}
           />
           <Icon type="MaterialIcons" name="search" style={styles.padding} />
         </Item>
       </View>
       <Content>
-        <View style={styles.card}>
-          <View style={[styles.action, styles.padding]}>
-            <TouchableOpacity onPress={editArticle}>
-              <Text style={[styles.fontSize_14, styles.bold, styles.blue]}>
-                Update
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={[styles.fontSize_14, styles.bold, styles.red]}>
-                Delete
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Image source={Dummy} style={styles.newsImage} />
-          <View style={styles.padding}>
-            <TouchableOpacity onPress={readNewsDetail}>
-              <Text style={[styles.bold, styles.marginBottom_8]}>
-                Liga Inggris: James Rodriguez Buka-bukaan Alasan Pernah Tolak
-                Gabung Manchester United
-              </Text>
-            </TouchableOpacity>
-            <Text
-              numberOfLines={2}
-              ellipsizeMode="tail"
-              style={styles.fontSize_14}>
-              Bola.com, Liverpool - Striker Everton, James Rodriguez, mengungkap
-              fakta menarik menjelang duel melawan Manchester United di Liga
-              Inggris, Sabtu (7/11/2020) malam.
-            </Text>
-          </View>
-        </View>
-
-        {/* dummy content */}
-        <View style={styles.card}>
-          <View style={[styles.action, styles.padding]}>
-            <TouchableOpacity>
-              <Text style={[styles.fontSize_14, styles.bold, styles.blue]}>
-                Update
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={[styles.fontSize_14, styles.bold, styles.red]}>
-                Delete
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Image source={Dummy} style={styles.newsImage} />
-          <View style={styles.padding}>
-            <TouchableOpacity onPress={readNewsDetail}>
-              <Text style={[styles.bold, styles.marginBottom_8]}>
-                Liga Inggris: James Rodriguez Buka-bukaan Alasan Pernah Tolak
-                Gabung Manchester United
-              </Text>
-            </TouchableOpacity>
-            <Text
-              numberOfLines={2}
-              ellipsizeMode="tail"
-              style={styles.fontSize_14}>
-              Bola.com, Liverpool - Striker Everton, James Rodriguez, mengungkap
-              fakta menarik menjelang duel melawan Manchester United di Liga
-              Inggris, Sabtu (7/11/2020) malam.
-            </Text>
-          </View>
-        </View>
-        <View style={styles.card}>
-          <View style={[styles.action, styles.padding]}>
-            <TouchableOpacity>
-              <Text style={[styles.fontSize_14, styles.bold, styles.blue]}>
-                Update
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={[styles.fontSize_14, styles.bold, styles.red]}>
-                Delete
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Image source={Dummy} style={styles.newsImage} />
-          <View style={styles.padding}>
-            <TouchableOpacity onPress={readNewsDetail}>
-              <Text style={[styles.bold, styles.marginBottom_8]}>
-                Liga Inggris: James Rodriguez Buka-bukaan Alasan Pernah Tolak
-                Gabung Manchester United
-              </Text>
-            </TouchableOpacity>
-            <Text
-              numberOfLines={2}
-              ellipsizeMode="tail"
-              style={styles.fontSize_14}>
-              Bola.com, Liverpool - Striker Everton, James Rodriguez, mengungkap
-              fakta menarik menjelang duel melawan Manchester United di Liga
-              Inggris, Sabtu (7/11/2020) malam.
-            </Text>
-          </View>
-        </View>
+        {news.userNewsIsLoading && <Spinner color="#2395FF" />}
+        {news.userNewsData.length > 0 &&
+          news.userNewsData.map((article) => {
+            return (
+              <View style={styles.card} key={article.id}>
+                <View style={[styles.action, styles.padding]}>
+                  <TouchableOpacity onPress={editArticle}>
+                    <Text
+                      style={[styles.fontSize_14, styles.bold, styles.blue]}>
+                      Update
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <Text style={[styles.fontSize_14, styles.bold, styles.red]}>
+                      Delete
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Image
+                  source={{ uri: `${API_URL}${article.image}` }}
+                  style={styles.newsImage}
+                />
+                <View style={styles.padding}>
+                  <TouchableOpacity onPress={() => readNewsDetail(article.id)}>
+                    <Text style={[styles.bold, styles.marginBottom_8]}>
+                      {article.title}
+                    </Text>
+                  </TouchableOpacity>
+                  <Text
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                    style={styles.fontSize_14}>
+                    {article.content}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
 
         {/* pagination */}
         <View style={styles.pagination}>

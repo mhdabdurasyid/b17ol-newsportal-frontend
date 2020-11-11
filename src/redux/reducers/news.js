@@ -9,6 +9,11 @@ const initialState = {
   newsDetailIsLoading: false,
   newsDetailIsError: false,
   newsDetailAlertMsg: '',
+
+  userNewsData: [],
+  userNewsIsLoading: false,
+  userNewsIsError: false,
+  userNewsAlertMsg: '',
 };
 
 export default (state = initialState, action) => {
@@ -68,6 +73,28 @@ export default (state = initialState, action) => {
     }
     case 'DESTROY_NEWS': {
       return initialState;
+    }
+    case 'GET_USER_NEWS_PENDING': {
+      return {
+        ...state,
+        userNewsIsLoading: true,
+      };
+    }
+    case 'GET_USER_NEWS_REJECTED': {
+      return {
+        ...state,
+        userNewsIsLoading: false,
+        userNewsIsError: true,
+        userNewsAlertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'GET_USER_NEWS_FULFILLED': {
+      return {
+        ...state,
+        userNewsIsLoading: false,
+        userNewsIsError: false,
+        userNewsData: action.payload.data.result,
+      };
     }
     default: {
       return state;

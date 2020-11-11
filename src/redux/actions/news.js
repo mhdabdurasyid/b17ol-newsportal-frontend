@@ -16,4 +16,8 @@ export default {
   resetNewsDetail: () => ({
     type: 'RESET_NEWS_DETAIL',
   }),
+  getNewsByUser: (keyword = '', token) => ({
+    type: 'GET_USER_NEWS',
+    payload: http(token).get(`private/news?search=${keyword}`),
+  }),
 };
