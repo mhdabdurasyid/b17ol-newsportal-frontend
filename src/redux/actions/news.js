@@ -5,9 +5,9 @@ export default {
   destroy: () => ({
     type: 'DESTROY_NEWS',
   }),
-  getAllNews: (keyword = '') => ({
+  getAllNews: (keyword = '', page = 1) => ({
     type: 'GET_ALL_NEWS',
-    payload: http().get(`news?search=${keyword}`),
+    payload: http().get(`news?search=${keyword}&page=${page}`),
   }),
   getNewsDetail: (id) => ({
     type: 'GET_NEWS_DETAIL',
@@ -18,6 +18,6 @@ export default {
   }),
   getNewsByUser: (keyword = '', token, page = 1) => ({
     type: 'GET_USER_NEWS',
-    payload: http(token).get(`private/news?search=${keyword}&page=${page}&limit=2`),
+    payload: http(token).get(`private/news?search=${keyword}&page=${page}`),
   }),
 };

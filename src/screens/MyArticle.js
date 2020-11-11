@@ -1,14 +1,13 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
+import { Container, Text, Item, Input, Icon, Spinner } from 'native-base';
 import {
-  Container,
-  Text,
-  Item,
-  Input,
-  Icon,
-  Spinner,
-} from 'native-base';
-import { Image, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+  Image,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '@env';
 
@@ -35,6 +34,7 @@ export default function MyArticle({ navigation }) {
         setData(data.concat(news.userNewsData));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [news.userNewsPageInfo.currentPage, news.userNewsData.length]);
 
   function readNewsDetail(id) {
@@ -48,7 +48,13 @@ export default function MyArticle({ navigation }) {
 
   function loadMore() {
     if (news.userNewsPageInfo.nextLink) {
-      dispatch(newsAction.getNewsByUser(keyword, auth.token, news.userNewsPageInfo.currentPage + 1));
+      dispatch(
+        newsAction.getNewsByUser(
+          keyword,
+          auth.token,
+          news.userNewsPageInfo.currentPage + 1,
+        ),
+      );
     }
   }
 
@@ -72,8 +78,7 @@ export default function MyArticle({ navigation }) {
           <View style={styles.card}>
             <View style={[styles.action, styles.padding]}>
               <TouchableOpacity onPress={editArticle}>
-                <Text
-                  style={[styles.fontSize_14, styles.bold, styles.blue]}>
+                <Text style={[styles.fontSize_14, styles.bold, styles.blue]}>
                   Update
                 </Text>
               </TouchableOpacity>
@@ -102,7 +107,7 @@ export default function MyArticle({ navigation }) {
             </View>
           </View>
         )}
-        onEndReached={async()=> await loadMore()}
+        onEndReached={async () => await loadMore()}
         onEndReachedThreshold={0.2}
       />
     </Container>

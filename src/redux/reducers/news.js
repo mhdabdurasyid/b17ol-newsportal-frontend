@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 const initialState = {
   allNewsData: [],
+  allNewsPageInfo: {},
   allNewsIsLoading: false,
   allNewsIsError: false,
   allNewsAlertMsg: '',
@@ -39,6 +40,7 @@ export default (state = initialState, action) => {
         allNewsIsLoading: false,
         allNewsIsError: false,
         allNewsData: action.payload.data.result,
+        allNewsPageInfo: action.payload.data.pageInfo,
       };
     }
     case 'GET_NEWS_DETAIL_PENDING': {
