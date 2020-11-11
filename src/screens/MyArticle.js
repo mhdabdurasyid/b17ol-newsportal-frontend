@@ -2,15 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import {
   Container,
-  Content,
   Text,
   Item,
   Input,
   Icon,
-  Button,
   Spinner,
 } from 'native-base';
-import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '@env';
 
@@ -23,10 +21,21 @@ export default function MyArticle({ navigation }) {
   const auth = useSelector((state) => state.auth);
 
   const [keyword, setKeyword] = useState('');
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     dispatch(newsAction.getNewsByUser(keyword, auth.token));
   }, [auth.token, dispatch, keyword]);
+
+  useEffect(() => {
+    if (news.userNewsData.length > 0) {
+      if (news.userNewsPageInfo.currentPage === 1) {
+        setData(news.userNewsData);
+      } else {
+        setData(data.concat(news.userNewsData));
+      }
+    }
+  }, [news.userNewsPageInfo.currentPage, news.userNewsData.length]);
 
   function readNewsDetail(id) {
     dispatch(newsAction.resetNewsDetail());
@@ -35,6 +44,12 @@ export default function MyArticle({ navigation }) {
 
   function editArticle() {
     navigation.navigate('Edit_Article');
+  }
+
+  function loadMore() {
+    if (news.userNewsPageInfo.nextLink) {
+      dispatch(newsAction.getNewsByUser(keyword, auth.token, news.userNewsPageInfo.currentPage + 1));
+    }
   }
 
   return (
@@ -50,59 +65,46 @@ export default function MyArticle({ navigation }) {
           <Icon type="MaterialIcons" name="search" style={styles.padding} />
         </Item>
       </View>
-      <Content>
-        {news.userNewsIsLoading && <Spinner color="#2395FF" />}
-        {news.userNewsData.length > 0 &&
-          news.userNewsData.map((article) => {
-            return (
-              <View style={styles.card} key={article.id}>
-                <View style={[styles.action, styles.padding]}>
-                  <TouchableOpacity onPress={editArticle}>
-                    <Text
-                      style={[styles.fontSize_14, styles.bold, styles.blue]}>
-                      Update
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Text style={[styles.fontSize_14, styles.bold, styles.red]}>
-                      Delete
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <Image
-                  source={{ uri: `${API_URL}${article.image}` }}
-                  style={styles.newsImage}
-                />
-                <View style={styles.padding}>
-                  <TouchableOpacity onPress={() => readNewsDetail(article.id)}>
-                    <Text style={[styles.bold, styles.marginBottom_8]}>
-                      {article.title}
-                    </Text>
-                  </TouchableOpacity>
-                  <Text
-                    numberOfLines={2}
-                    ellipsizeMode="tail"
-                    style={styles.fontSize_14}>
-                    {article.content}
-                  </Text>
-                </View>
-              </View>
-            );
-          })}
-
-        {/* pagination */}
-        <View style={styles.pagination}>
-          <Button style={styles.pageBtn} disabled>
-            <Text>{'<'}</Text>
-          </Button>
-          <Text style={styles.fontSize_14}>
-            {'    '}1{'    '}
-          </Text>
-          <Button style={styles.pageBtn}>
-            <Text>{'>'}</Text>
-          </Button>
-        </View>
-      </Content>
+      {news.userNewsIsLoading && <Spinner color="#2395FF" />}
+      <FlatList
+        data={data}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <View style={[styles.action, styles.padding]}>
+              <TouchableOpacity onPress={editArticle}>
+                <Text
+                  style={[styles.fontSize_14, styles.bold, styles.blue]}>
+                  Update
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={[styles.fontSize_14, styles.bold, styles.red]}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <Image
+              source={{ uri: `${API_URL}${item.image}` }}
+              style={styles.newsImage}
+            />
+            <View style={styles.padding}>
+              <TouchableOpacity onPress={() => readNewsDetail(item.id)}>
+                <Text style={[styles.bold, styles.marginBottom_8]}>
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+              <Text
+                numberOfLines={2}
+                ellipsizeMode="tail"
+                style={styles.fontSize_14}>
+                {item.content}
+              </Text>
+            </View>
+          </View>
+        )}
+        onEndReached={async()=> await loadMore()}
+        onEndReachedThreshold={0.2}
+      />
     </Container>
   );
 }

@@ -11,6 +11,7 @@ const initialState = {
   newsDetailAlertMsg: '',
 
   userNewsData: [],
+  userNewsPageInfo: {},
   userNewsIsLoading: false,
   userNewsIsError: false,
   userNewsAlertMsg: '',
@@ -94,6 +95,7 @@ export default (state = initialState, action) => {
         userNewsIsLoading: false,
         userNewsIsError: false,
         userNewsData: action.payload.data.result,
+        userNewsPageInfo: action.payload.data.pageInfo,
       };
     }
     default: {
