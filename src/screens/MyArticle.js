@@ -21,6 +21,7 @@ export default function MyArticle({ navigation }) {
 
   const [keyword, setKeyword] = useState('');
   const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     dispatch(newsAction.getNewsByUser(keyword, auth.token));
@@ -36,6 +37,14 @@ export default function MyArticle({ navigation }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [news.userNewsPageInfo.currentPage, news.userNewsData.length]);
+
+  useEffect(() => {
+    if (refreshing) {
+      setData(news.userNewsData);
+      setRefreshing(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [news.userNewsData]);
 
   function readNewsDetail(id) {
     dispatch(newsAction.resetNewsDetail());
@@ -56,6 +65,11 @@ export default function MyArticle({ navigation }) {
         ),
       );
     }
+  }
+
+  function doRefresh() {
+    setRefreshing(true);
+    dispatch(newsAction.getNewsByUser('', auth.token));
   }
 
   return (
@@ -109,6 +123,8 @@ export default function MyArticle({ navigation }) {
         )}
         onEndReached={async () => await loadMore()}
         onEndReachedThreshold={0.2}
+        onRefresh={doRefresh}
+        refreshing={refreshing}
       />
     </Container>
   );

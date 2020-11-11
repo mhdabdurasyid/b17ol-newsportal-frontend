@@ -32,6 +32,7 @@ export default function Home({ navigation }) {
 
   const [keyword, setKeyword] = useState('');
   const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     dispatch(newsAction.getAllNews(keyword));
@@ -48,6 +49,14 @@ export default function Home({ navigation }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [news.allNewsPageInfo.currentPage, news.allNewsData.length]);
 
+  useEffect(() => {
+    if (refreshing) {
+      setData(news.allNewsData);
+      setRefreshing(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [news.allNewsData]);
+
   function readNewsDetail(id) {
     dispatch(newsAction.resetNewsDetail());
     navigation.navigate('Detail', { id });
@@ -59,6 +68,11 @@ export default function Home({ navigation }) {
         newsAction.getAllNews(keyword, news.allNewsPageInfo.currentPage + 1),
       );
     }
+  }
+
+  function doRefresh() {
+    setRefreshing(true);
+    dispatch(newsAction.getAllNews(''));
   }
 
   return (
@@ -119,6 +133,8 @@ export default function Home({ navigation }) {
         )}
         onEndReached={async () => await loadMore()}
         onEndReachedThreshold={0.2}
+        onRefresh={doRefresh}
+        refreshing={refreshing}
       />
     </Container>
   );
