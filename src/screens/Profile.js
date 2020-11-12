@@ -30,7 +30,8 @@ export default function Profile({ navigation }) {
 
   useEffect(() => {
     dispatch(profileAction.getProfile(auth.token));
-  }, [auth.token, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   function editProfile() {
     navigation.navigate('Edit_Profile');
