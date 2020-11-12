@@ -1,10 +1,9 @@
-/* eslint-disable prettier/prettier */
-import { createStore, applyMiddleware } from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import rootReducer from './reducers/index';
 import logger from 'redux-logger';
 import promiseMiddleware from 'redux-promise-middleware';
 import AsyncStorage from '@react-native-community/async-storage';
-import { persistStore, persistReducer } from 'redux-persist';
+import {persistStore, persistReducer} from 'redux-persist';
 
 const persistConfig = {
   key: 'root',
@@ -25,4 +24,4 @@ const store = createStore(
 
 let persistor = persistStore(store);
 
-export { store, persistor };
+export {store, persistor};

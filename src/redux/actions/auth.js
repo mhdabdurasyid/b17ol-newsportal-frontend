@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import http from '../../helpers/http';
 import qs from 'querystring';
 

@@ -1,14 +1,13 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
-import { Container, Content, Text, Item, Input, Button } from 'native-base';
-import { Alert, Image, StyleSheet } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {Container, Content, Text, Item, Input, Button} from 'native-base';
+import {Alert, Image, StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 
 // import actions
 import newsAction from '../redux/actions/news';
 
-export default function PostArticle({ navigation }) {
+export default function PostArticle({navigation}) {
   const dispatch = useDispatch();
   const news = useSelector((state) => state.news);
   const auth = useSelector((state) => state.auth);
@@ -75,7 +74,7 @@ export default function PostArticle({ navigation }) {
           Write your article here.
         </Text>
         {imgData && image !== '' && (
-          <Image source={{ uri: image }} style={styles.newsImage} />
+          <Image source={{uri: image}} style={styles.newsImage} />
         )}
         <Button
           small

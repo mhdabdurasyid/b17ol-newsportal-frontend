@@ -1,22 +1,21 @@
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
-import { Text, Button, Item, Input, Icon } from 'native-base';
-import { View, StyleSheet } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState, useEffect} from 'react';
+import {Text, Button, Item, Input, Icon} from 'native-base';
+import {Alert, View, StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 
 // import actions
 import registerAction from '../redux/actions/auth';
 
-export default function Register({ navigation }) {
+export default function Register({navigation}) {
   const dispatch = useDispatch();
-  const auth = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (auth.isRegister) {
-      alert('Register succesful');
+      Alert.alert('Register succesful');
       navigation.navigate('Login');
       dispatch(registerAction.resetRegister());
     }

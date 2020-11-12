@@ -1,9 +1,8 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
-import { Container, Content, Text, Thumbnail, Spinner } from 'native-base';
-import { Image, View, StyleSheet } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { API_URL } from '@env';
+import React, {useEffect} from 'react';
+import {Container, Content, Text, Thumbnail, Spinner} from 'native-base';
+import {Image, View, StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_URL} from '@env';
 import dayjs from 'dayjs';
 
 // import actions
@@ -12,8 +11,8 @@ import newsAction from '../redux/actions/news';
 // import default avatar
 import User from '../assets/img/avatar.png';
 
-export default function Detail({ route }) {
-  const { id } = route.params;
+export default function Detail({route}) {
+  const {id} = route.params;
   const dispatch = useDispatch();
   const news = useSelector((state) => state.news);
 
@@ -26,7 +25,7 @@ export default function Detail({ route }) {
       {news.newsDetailIsLoading && <Spinner color="#2395FF" />}
       <Content>
         <Image
-          source={{ uri: `${API_URL}${news.newsDetailData.image}` }}
+          source={{uri: `${API_URL}${news.newsDetailData.image}`}}
           style={styles.newsImage}
         />
         <View style={styles.padding}>
@@ -42,7 +41,7 @@ export default function Detail({ route }) {
             <Thumbnail
               source={
                 news.newsDetailData.Author.photo !== null
-                  ? { uri: `${API_URL}${news.newsDetailData.Author.photo}` }
+                  ? {uri: `${API_URL}${news.newsDetailData.Author.photo}`}
                   : User
               }
               style={styles.avatar}

@@ -1,16 +1,15 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
-import { Container, Content, Text, Item, Input, Button } from 'native-base';
-import { Alert, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { API_URL } from '@env';
+import React, {useEffect, useState} from 'react';
+import {Container, Content, Text, Item, Input, Button} from 'native-base';
+import {Alert, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_URL} from '@env';
 import ImagePicker from 'react-native-image-picker';
 
 // import actions
 import newsAction from '../redux/actions/news';
 
-export default function EditArticle({ route, navigation }) {
-  const { id } = route.params;
+export default function EditArticle({route, navigation}) {
+  const {id} = route.params;
   const dispatch = useDispatch();
   const news = useSelector((state) => state.news);
   const auth = useSelector((state) => state.auth);
@@ -88,7 +87,7 @@ export default function EditArticle({ route, navigation }) {
         </Text>
         <TouchableOpacity onPress={selectImage}>
           <Image
-            source={{ uri: !imgData ? `${API_URL}${image}` : image }}
+            source={{uri: !imgData ? `${API_URL}${image}` : image}}
             style={styles.newsImage}
           />
         </TouchableOpacity>

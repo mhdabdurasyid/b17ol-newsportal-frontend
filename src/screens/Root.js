@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
-import { Text, Button } from 'native-base';
-import { Image, View, StyleSheet } from 'react-native';
-import { useDispatch } from 'react-redux';
+import {Text, Button} from 'native-base';
+import {Image, View, StyleSheet} from 'react-native';
+import {useDispatch} from 'react-redux';
 
 // import actions
 import newsAction from '../redux/actions/news';
@@ -10,7 +9,7 @@ import newsAction from '../redux/actions/news';
 // import default logo
 import Logo from '../assets/img/logo.png';
 
-export default function Root({ navigation }) {
+export default function Root({navigation}) {
   const dispatch = useDispatch();
 
   function goToHome() {

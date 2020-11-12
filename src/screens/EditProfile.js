@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Container,
   Content,
@@ -10,9 +9,9 @@ import {
   Thumbnail,
   Icon,
 } from 'native-base';
-import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { API_URL } from '@env';
+import {View, StyleSheet, Alert, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_URL} from '@env';
 import ImagePicker from 'react-native-image-picker';
 
 // import actions
@@ -21,7 +20,7 @@ import profileAction from '../redux/actions/profile';
 // import default avatar
 import User from '../assets/img/avatar.png';
 
-export default function EditProfile({ navigation }) {
+export default function EditProfile({navigation}) {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const profile = useSelector((state) => state.profile);
@@ -90,10 +89,10 @@ export default function EditProfile({ navigation }) {
               source={
                 photo !== null
                   ? {
-                    uri: photo.includes('upload')
-                      ? `${API_URL}${photo}`
-                      : photo,
-                  }
+                      uri: photo.includes('upload')
+                        ? `${API_URL}${photo}`
+                        : photo,
+                    }
                   : User
               }
             />

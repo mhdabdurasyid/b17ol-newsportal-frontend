@@ -1,6 +1,5 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
-import { Container, Text, Item, Input, Icon, Spinner } from 'native-base';
+import React, {useEffect, useState} from 'react';
+import {Container, Text, Item, Input, Icon, Spinner} from 'native-base';
 import {
   Image,
   View,
@@ -9,13 +8,13 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { API_URL } from '@env';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_URL} from '@env';
 
 // import actions
 import newsAction from '../redux/actions/news';
 
-export default function MyArticle({ navigation }) {
+export default function MyArticle({navigation}) {
   const dispatch = useDispatch();
   const news = useSelector((state) => state.news);
   const auth = useSelector((state) => state.auth);
@@ -57,12 +56,12 @@ export default function MyArticle({ navigation }) {
 
   function readNewsDetail(id) {
     dispatch(newsAction.resetNewsDetail());
-    navigation.navigate('Detail', { id });
+    navigation.navigate('Detail', {id});
   }
 
   function editArticle(id) {
     dispatch(newsAction.resetNewsDetail());
-    navigation.navigate('Edit_Article', { id });
+    navigation.navigate('Edit_Article', {id});
   }
 
   function loadMore() {
@@ -100,14 +99,16 @@ export default function MyArticle({ navigation }) {
         </Item>
       </View>
       {news.userNewsIsLoading && <Spinner color="#2395FF" />}
-      {(news.userNewsIsError && news.userNewsData.length === 0) && (
+      {news.userNewsIsError && news.userNewsData.length === 0 && (
         <View style={styles.isError}>
-          <Text style={styles.padding}>There is no article or news. Create first!</Text>
+          <Text style={styles.padding}>
+            There is no article or news. Create first!
+          </Text>
         </View>
       )}
       <FlatList
         data={data}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <View style={styles.card}>
             <View style={[styles.action, styles.padding]}>
               <TouchableOpacity onPress={() => editArticle(item.id)}>
@@ -122,7 +123,7 @@ export default function MyArticle({ navigation }) {
               </TouchableOpacity>
             </View>
             <Image
-              source={{ uri: `${API_URL}${item.image}` }}
+              source={{uri: `${API_URL}${item.image}`}}
               style={styles.newsImage}
             />
             <View style={styles.padding}>

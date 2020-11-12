@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Container,
   Text,
@@ -16,8 +15,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { API_URL } from '@env';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_URL} from '@env';
 import dayjs from 'dayjs';
 
 // import actions
@@ -26,7 +25,7 @@ import newsAction from '../redux/actions/news';
 // import default avatar
 import User from '../assets/img/avatar.png';
 
-export default function Home({ navigation }) {
+export default function Home({navigation}) {
   const dispatch = useDispatch();
   const news = useSelector((state) => state.news);
 
@@ -59,7 +58,7 @@ export default function Home({ navigation }) {
 
   function readNewsDetail(id) {
     dispatch(newsAction.resetNewsDetail());
-    navigation.navigate('Detail', { id });
+    navigation.navigate('Detail', {id});
   }
 
   function loadMore() {
@@ -89,21 +88,21 @@ export default function Home({ navigation }) {
         </Item>
       </View>
       {news.allNewsIsLoading && <Spinner color="#2395FF" />}
-      {(news.allNewsIsError && news.allNewsData.length === 0) && (
+      {news.allNewsIsError && news.allNewsData.length === 0 && (
         <View style={styles.isError}>
           <Text style={styles.padding}>There is no article or news!</Text>
         </View>
       )}
       <FlatList
         data={data}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <View style={styles.card}>
             <View style={[styles.author, styles.padding]}>
               <Thumbnail
                 small
                 source={
                   item.Author.photo !== null
-                    ? { uri: `${API_URL}${item.Author.photo}` }
+                    ? {uri: `${API_URL}${item.Author.photo}`}
                     : User
                 }
                 style={styles.avatar}
@@ -118,7 +117,7 @@ export default function Home({ navigation }) {
               </View>
             </View>
             <Image
-              source={{ uri: `${API_URL}${item.image}` }}
+              source={{uri: `${API_URL}${item.image}`}}
               style={styles.newsImage}
             />
             <View style={styles.padding}>

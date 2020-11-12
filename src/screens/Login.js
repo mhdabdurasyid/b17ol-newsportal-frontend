@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
-import { Text, Button, Item, Input, Icon } from 'native-base';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, {useState} from 'react';
+import {Text, Button, Item, Input, Icon} from 'native-base';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
 
 // import actions
 import loginAction from '../redux/actions/auth';

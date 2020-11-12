@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   Container,
   Content,
@@ -11,9 +10,9 @@ import {
   List,
   ListItem,
 } from 'native-base';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { API_URL } from '@env';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_URL} from '@env';
 
 // import actions
 import authAction from '../redux/actions/auth';
@@ -23,14 +22,14 @@ import profileAction from '../redux/actions/profile';
 // import default avatar
 import User from '../assets/img/avatar.png';
 
-export default function Profile({ navigation }) {
+export default function Profile({navigation}) {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const profile = useSelector((state) => state.profile);
 
   useEffect(() => {
     dispatch(profileAction.getProfile(auth.token));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   function editProfile() {
@@ -51,7 +50,7 @@ export default function Profile({ navigation }) {
           <Thumbnail
             source={
               profile.profileData.photo !== null
-                ? { uri: `${API_URL}${profile.profileData.photo}` }
+                ? {uri: `${API_URL}${profile.profileData.photo}`}
                 : User
             }
             style={styles.avatar}
@@ -60,9 +59,7 @@ export default function Profile({ navigation }) {
             <Text style={[styles.fontSize_14, styles.bold]}>
               {profile.profileData.name}
             </Text>
-            <Text style={styles.fontSize_14}>
-              {profile.profileData.email}
-            </Text>
+            <Text style={styles.fontSize_14}>{profile.profileData.email}</Text>
             <TouchableOpacity onPress={editProfile}>
               <Icon
                 type="MaterialIcons"

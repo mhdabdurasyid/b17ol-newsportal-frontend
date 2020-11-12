@@ -1,10 +1,9 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Icon } from 'native-base';
-import { useSelector } from 'react-redux';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Icon} from 'native-base';
+import {useSelector} from 'react-redux';
 
 // import screens
 import Root from './Root';
@@ -35,12 +34,7 @@ function PrivateStackScreen() {
         component={Home}
         options={{
           tabBarIcon: (focused, color, size) => (
-            <Icon
-              type="MaterialIcons"
-              name="home"
-              size={size}
-              color={color}
-            />
+            <Icon type="MaterialIcons" name="home" size={size} color={color} />
           ),
           title: 'Home',
         }}
@@ -94,7 +88,7 @@ function PrivateStackScreen() {
 }
 
 export default function Main() {
-  const auth = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
 
   return (
     <NavigationContainer>
@@ -103,53 +97,53 @@ export default function Main() {
           <Stack.Screen
             name="Root"
             component={Root}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Register"
             component={Register}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Login"
             component={Login}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Public_Home"
             component={Home}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Detail"
             component={Detail}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
         </Stack.Navigator>
       ) : (
-          <MainStack.Navigator>
-            <MainStack.Screen
-              name="Main"
-              component={PrivateStackScreen}
-              options={{ headerShown: false }}
-            />
-            <MainStack.Screen
-              name="Detail"
-              component={Detail}
-              options={{ headerShown: false }}
-            />
-            <MainStack.Screen
-              name="Edit_Article"
-              component={EditArticle}
-              options={{ headerShown: false }}
-            />
-            <MainStack.Screen
-              name="Edit_Profile"
-              component={EditProfile}
-              options={{ headerShown: false }}
-            />
-          </MainStack.Navigator>
-        )}
+        <MainStack.Navigator>
+          <MainStack.Screen
+            name="Main"
+            component={PrivateStackScreen}
+            options={{headerShown: false}}
+          />
+          <MainStack.Screen
+            name="Detail"
+            component={Detail}
+            options={{headerShown: false}}
+          />
+          <MainStack.Screen
+            name="Edit_Article"
+            component={EditArticle}
+            options={{headerShown: false}}
+          />
+          <MainStack.Screen
+            name="Edit_Profile"
+            component={EditProfile}
+            options={{headerShown: false}}
+          />
+        </MainStack.Navigator>
+      )}
     </NavigationContainer>
   );
 }
