@@ -1,4 +1,4 @@
-package com.newsportalfrontend;
+package com.balbalan.news;
 
 import android.app.Application;
 import android.content.Context;

@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.newsportalfrontend"
+        applicationId "com.balbalan.news"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

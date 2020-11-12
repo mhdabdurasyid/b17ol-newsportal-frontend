@@ -3,12 +3,12 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'NewsportalFrontend' do
+target 'Balbalan' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'NewsportalFrontendTests' do
+  target 'BalbalanTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -23,10 +23,10 @@ target 'NewsportalFrontend' do
   end
 end
 
-target 'NewsportalFrontend-tvOS' do
-  # Pods for NewsportalFrontend-tvOS
+target 'Balbalan-tvOS' do
+  # Pods for Balbalan-tvOS
 
-  target 'NewsportalFrontend-tvOSTests' do
+  target 'Balbalan-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
