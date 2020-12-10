@@ -32,7 +32,7 @@ export default function ForgotPassword({navigation}) {
     }
 
     if (emailValidData.id) {
-      navigation.navigate('Login', {id: emailValidData.id});
+      navigation.navigate('ResetPassword', {id: emailValidData.id});
       dispatch(authAction.reset());
     }
   });
