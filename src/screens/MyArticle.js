@@ -25,7 +25,8 @@ export default function MyArticle({navigation}) {
 
   useEffect(() => {
     dispatch(newsAction.getNewsByUser(keyword, auth.token));
-  }, [auth.token, dispatch, keyword]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, keyword]);
 
   useEffect(() => {
     if (news.userNewsData.length > 0) {
