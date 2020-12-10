@@ -69,10 +69,11 @@ export default (state = initialState, action) => {
         registerAlert: 'Successfully register',
       };
     }
-    case 'RESET_IS_REGISTER': {
+    case 'RESET': {
       return {
         ...state,
         isRegister: false,
+        isError: false,
       };
     }
     case 'LOGOUT': {
