@@ -5,7 +5,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-export default function EditPassword() {
+// import actions
+import profileAction from '../redux/actions/profile';
+
+export default function EditPassword({navigation}) {
+  const dispatch = useDispatch();
+  const {token} = useSelector((state) => state.auth);
+  const {isEdit, editIsError} = useSelector((state) => state.profile);
+
   const schema = Yup.object().shape({
     oldPassword: Yup.string()
       .min(6, 'Password required at least 6 characters')
@@ -20,6 +27,29 @@ export default function EditPassword() {
       .required('Required field'),
   });
 
+  function changePassword(data) {
+    dispatch(profileAction.updatePassword(data, token));
+  }
+
+  useEffect(() => {
+    if (isEdit) {
+      Alert.alert(
+        'Change password success!',
+        'Your password has been changed.',
+      );
+      dispatch(profileAction.resetEdit());
+      navigation.navigate('Profile');
+    }
+
+    if (editIsError) {
+      Alert.alert(
+        'Change password failed!',
+        'Your old password is wrong, please enter it correctly.',
+      );
+      dispatch(profileAction.resetEdit());
+    }
+  });
+
   return (
     <Container>
       <Formik
@@ -29,7 +59,7 @@ export default function EditPassword() {
           confirmPassword: '',
         }}
         validationSchema={schema}
-        onSubmit={(values) => console.log(values)}>
+        onSubmit={(values) => changePassword(values)}>
         {({
           handleChange,
           handleBlur,
