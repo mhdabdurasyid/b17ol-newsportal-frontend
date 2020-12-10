@@ -1,15 +1,40 @@
 import React, {useEffect} from 'react';
 import {Text, Button, Item, Input, Icon} from 'native-base';
-import {Alert, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, View, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-export default function ForgotPassword() {
+// import actions
+import authAction from '../redux/actions/auth';
+
+export default function ForgotPassword({navigation}) {
+  const dispatch = useDispatch();
+  const {isEmailError, emailValidData} = useSelector((state) => state.auth);
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email('Please enter correct email')
       .required('Email field is required'),
+  });
+
+  function checkEmail(data) {
+    dispatch(authAction.forgotPassword(data));
+  }
+
+  useEffect(() => {
+    if (isEmailError) {
+      Alert.alert(
+        'Email not found!',
+        'There is no email registered yet, please enter your correct email address.',
+      );
+      dispatch(authAction.reset());
+    }
+
+    if (emailValidData.id) {
+      navigation.navigate('Login', {id: emailValidData.id});
+      dispatch(authAction.reset());
+    }
   });
 
   return (
@@ -18,7 +43,7 @@ export default function ForgotPassword() {
         email: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => checkEmail(values)}>
       {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
         <View style={styles.padding}>
           <Text style={[styles.center, styles.bold, styles.marginBottom]}>
