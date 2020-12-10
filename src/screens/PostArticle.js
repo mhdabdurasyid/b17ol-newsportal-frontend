@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Container, Content, Text, Item, Input, Button} from 'native-base';
-import {Alert, Image, StyleSheet} from 'react-native';
+import {Alert, Image, StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 // import actions
 import newsAction from '../redux/actions/news';
@@ -12,21 +14,24 @@ export default function PostArticle({navigation}) {
   const news = useSelector((state) => state.news);
   const auth = useSelector((state) => state.auth);
 
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const schema = Yup.object().shape({
+    title: Yup.string().required('Title field is required'),
+    content: Yup.string().required('Content field is required'),
+  });
+
   const [image, setImage] = useState('');
   const [imgData, setImgData] = useState(null);
 
   useEffect(() => {
     if (news.isPost) {
-      Alert.alert('Create article successful..');
+      Alert.alert('Success!', 'Create article successfully.');
+      dispatch(newsAction.getNewsByUser('', auth.token));
       navigation.navigate('Private_Home');
       dispatch(newsAction.resetPost());
-      setTitle('');
-      setContent('');
       setImage('');
       setImgData(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, navigation, news.isPost]);
 
   function selectImage() {
@@ -60,60 +65,97 @@ export default function PostArticle({navigation}) {
     });
   }
 
-  function doPostArticle() {
-    const form = new FormData();
-    form.append('title', title);
-    form.append('content', content);
-    form.append('image', imgData);
-
-    dispatch(newsAction.postNews(form, auth.token));
+  function doPostArticle(values) {
+    if (imgData) {
+      const form = new FormData();
+      form.append('title', values.title);
+      form.append('content', values.content);
+      form.append('image', imgData);
+      dispatch(newsAction.postNews(form, auth.token));
+    } else {
+      Alert.alert('Image required!', 'Please choose an article image.');
+    }
   }
 
   return (
     <Container>
-      <Content style={styles.padding}>
-        <Text style={[styles.bold, styles.header]}>
-          Write your article here.
-        </Text>
-        {imgData && image !== '' && (
-          <Image source={{uri: image}} style={styles.newsImage} />
+      <Formik
+        initialValues={{
+          title: '',
+          content: '',
+        }}
+        validationSchema={schema}
+        onSubmit={(values, {resetForm}) => {
+          resetForm({values: ''});
+          doPostArticle(values);
+        }}>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          touched,
+          errors,
+        }) => (
+          <Content style={styles.padding}>
+            <Text style={[styles.bold, styles.header]}>
+              Write your article here.
+            </Text>
+            {imgData && image !== '' && (
+              <Image source={{uri: image}} style={styles.newsImage} />
+            )}
+            <Button
+              small
+              block
+              rounded
+              style={styles.btnUpload}
+              onPress={selectImage}>
+              <Text>Choose article image</Text>
+            </Button>
+            <Text
+              style={[styles.bold, styles.fontSize_14, styles.marginBottom]}>
+              Title
+            </Text>
+            <View style={styles.marginBottom}>
+              <Item regular>
+                <Input
+                  multiline={true}
+                  numberOfLines={3}
+                  style={styles.fontSize_14}
+                  onChangeText={handleChange('title')}
+                  onBlur={handleBlur('title')}
+                  value={values.title}
+                />
+              </Item>
+              {touched.title && errors.title && (
+                <Text style={styles.error}>{errors.title}</Text>
+              )}
+            </View>
+            <Text
+              style={[styles.bold, styles.fontSize_14, styles.marginBottom]}>
+              Content/Description
+            </Text>
+            <View style={styles.marginBottom}>
+              <Item regular>
+                <Input
+                  multiline={true}
+                  numberOfLines={9}
+                  style={styles.fontSize_14}
+                  onChangeText={handleChange('content')}
+                  onBlur={handleBlur('content')}
+                  value={values.content}
+                />
+              </Item>
+              {touched.content && errors.content && (
+                <Text style={styles.error}>{errors.content}</Text>
+              )}
+            </View>
+            <Button rounded block style={styles.btn} onPress={handleSubmit}>
+              <Text style={styles.white}>Post Article</Text>
+            </Button>
+          </Content>
         )}
-        <Button
-          small
-          block
-          rounded
-          style={styles.btnUpload}
-          onPress={selectImage}>
-          <Text>Choose article image</Text>
-        </Button>
-        <Text style={[styles.bold, styles.fontSize_14, styles.marginBottom]}>
-          Title
-        </Text>
-        <Item regular style={styles.marginBottom}>
-          <Input
-            multiline={true}
-            numberOfLines={3}
-            style={styles.fontSize_14}
-            value={title}
-            onChangeText={(text) => setTitle(text)}
-          />
-        </Item>
-        <Text style={[styles.bold, styles.fontSize_14, styles.marginBottom]}>
-          Content/Description
-        </Text>
-        <Item regular style={styles.marginBottom}>
-          <Input
-            multiline={true}
-            numberOfLines={9}
-            style={styles.fontSize_14}
-            value={content}
-            onChangeText={(text) => setContent(text)}
-          />
-        </Item>
-        <Button rounded block style={styles.btn} onPress={doPostArticle}>
-          <Text style={styles.white}>Post Article</Text>
-        </Button>
-      </Content>
+      </Formik>
     </Container>
   );
 }
@@ -154,5 +196,9 @@ const styles = StyleSheet.create({
   btnUpload: {
     marginBottom: 24,
     backgroundColor: '#2395FF',
+  },
+  error: {
+    fontSize: 12,
+    color: 'red',
   },
 });
