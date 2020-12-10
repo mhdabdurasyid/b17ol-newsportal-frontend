@@ -108,6 +108,7 @@ export default function EditProfile({navigation}) {
             <View style={styles.avatar}>
               <TouchableOpacity onPress={selectImage}>
                 <Thumbnail
+                  large
                   source={
                     photo !== null
                       ? {
