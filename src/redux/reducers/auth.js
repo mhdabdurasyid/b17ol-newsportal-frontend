@@ -74,6 +74,7 @@ export default (state = initialState, action) => {
         ...state,
         isRegister: false,
         isError: false,
+        registerIsError: false,
       };
     }
     case 'LOGOUT': {
