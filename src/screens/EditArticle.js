@@ -33,7 +33,7 @@ export default function EditArticle({route, navigation}) {
 
   useEffect(() => {
     if (news.isEdit) {
-      Alert.alert('Edit article successful..');
+      Alert.alert('Success!', 'Edit article successfully.');
       navigation.navigate('My_Article');
       dispatch(newsAction.resetEdit());
     }
