@@ -141,6 +141,7 @@ export default function MyArticle({navigation}) {
             </View>
           </View>
         )}
+        keyExtractor={(item) => item.id.toString()}
         onEndReached={async () => await loadMore()}
         onEndReachedThreshold={0.2}
         onRefresh={doRefresh}
