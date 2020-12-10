@@ -11,6 +11,9 @@ const initialState = {
 
   isEmailError: false,
   emailValidData: {},
+
+  isResetError: false,
+  isReset: false,
 };
 
 export default (state = initialState, action) => {
@@ -96,6 +99,30 @@ export default (state = initialState, action) => {
         alertMsg: action.payload.data.message,
       };
     }
+    case 'RESET_PASSWORD_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        alertMsg: 'Resetting your password. Please wait..',
+      };
+    }
+    case 'RESET_PASSWORD_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isResetError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'RESET_PASSWORD_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isResetError: false,
+        isReset: true,
+        alertMsg: action.payload.data.message,
+      };
+    }
     case 'RESET': {
       return {
         ...state,
@@ -104,6 +131,8 @@ export default (state = initialState, action) => {
         registerIsError: false,
         isEmailError: false,
         emailValidData: {},
+        isResetError: false,
+        isReset: false,
       };
     }
     case 'LOGOUT': {

@@ -20,4 +20,8 @@ export default {
     type: 'FORGOT_PASSWORD',
     payload: http().post('/users/email', qs.stringify(data)),
   }),
+  resetPassword: (id, data) => ({
+    type: 'RESET_PASSWORD',
+    payload: http().put(`/users/resetPassword/${id}`, qs.stringify(data)),
+  }),
 };

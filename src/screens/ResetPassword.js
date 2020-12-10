@@ -5,8 +5,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-export default function ResetPassword({route}) {
+// import actions
+import authAction from '../redux/actions/auth';
+
+export default function ResetPassword({route, navigation}) {
   const {id} = route.params;
+  const dispatch = useDispatch();
+  const {isReset} = useSelector((state) => state.auth);
 
   const schema = Yup.object().shape({
     newPassword: Yup.string()
@@ -18,6 +23,18 @@ export default function ResetPassword({route}) {
       .required('Required field'),
   });
 
+  function doResetPassword(data) {
+    dispatch(authAction.resetPassword(id, data));
+  }
+
+  useEffect(() => {
+    if (isReset) {
+      Alert.alert('Reset password success!', 'Please login to continue.');
+      navigation.navigate('Login');
+      dispatch(authAction.reset());
+    }
+  });
+
   return (
     <Formik
       initialValues={{
@@ -25,7 +42,7 @@ export default function ResetPassword({route}) {
         confirmPassword: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => doResetPassword(values)}>
       {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
         <View style={styles.padding}>
           <Text style={[styles.center, styles.bold, styles.marginBottom]}>
