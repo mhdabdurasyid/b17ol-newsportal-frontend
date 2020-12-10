@@ -9,6 +9,7 @@ import {useSelector} from 'react-redux';
 import Root from './Root';
 import Register from './Register';
 import Login from './Login';
+import ForgotPassword from './ForgotPassword';
 import Home from './Home';
 import Detail from './Detail';
 import PostArticle from './PostArticle';
@@ -107,6 +108,11 @@ export default function Main() {
           <Stack.Screen
             name="Login"
             component={Login}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPassword}
             options={{headerShown: false}}
           />
           <Stack.Screen

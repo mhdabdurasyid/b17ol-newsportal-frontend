@@ -5,51 +5,29 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-// import actions
-import loginAction from '../redux/actions/auth';
-
-export default function Login({navigation}) {
-  const dispatch = useDispatch();
-  const {isError} = useSelector((state) => state.auth);
-
+export default function ForgotPassword() {
   const schema = Yup.object().shape({
     email: Yup.string()
       .email('Please enter correct email')
       .required('Email field is required'),
-    password: Yup.string()
-      .min(6, 'Password required at least 6 characters')
-      .max(20, 'Password required max 20 characters')
-      .required('Password field is required'),
-  });
-
-  function doLogin(data) {
-    dispatch(loginAction.login(data));
-  }
-
-  useEffect(() => {
-    if (isError) {
-      Alert.alert('Login failed!', 'Email or password is wrong.');
-      dispatch(loginAction.reset());
-    }
   });
 
   return (
     <Formik
       initialValues={{
         email: '',
-        password: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => doLogin(values)}>
+      onSubmit={(values) => console.log(values)}>
       {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
         <View style={styles.padding}>
           <Text style={[styles.center, styles.bold, styles.marginBottom]}>
-            Login
+            Forgot Password
           </Text>
           <Text
             style={[styles.center, styles.fontSize_14, styles.marginBottom]}>
-            Login to your existing account to access all the features in
-            Balbalan.
+            Do you forgot your password? Please type your correct email address
+            to reset your password.
           </Text>
           <View style={styles.marginBottom}>
             <Item>
@@ -66,31 +44,8 @@ export default function Login({navigation}) {
               <Text style={styles.error}>{errors.email}</Text>
             )}
           </View>
-          <View style={styles.marginBottom}>
-            <Item>
-              <Icon type="MaterialIcons" name="lock" style={styles.blue} />
-              <Input
-                placeholder="Password"
-                secureTextEntry
-                style={styles.fontSize_14}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                value={values.password}
-              />
-            </Item>
-            {touched.password && errors.password && (
-              <Text style={styles.error}>{errors.password}</Text>
-            )}
-          </View>
-          <TouchableOpacity
-            style={styles.marginBottom}
-            onPress={() => navigation.navigate('ForgotPassword')}>
-            <Text style={[styles.fontSize_14, styles.textRight]}>
-              Forgot password?
-            </Text>
-          </TouchableOpacity>
           <Button rounded block style={styles.btn} onPress={handleSubmit}>
-            <Text style={styles.white}>{'  Login  '}</Text>
+            <Text style={styles.white}>{'  Forgot Password  '}</Text>
           </Button>
         </View>
       )}
@@ -129,9 +84,6 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: 'bold',
     fontSize: 24,
-  },
-  textRight: {
-    textAlign: 'right',
   },
   error: {
     fontSize: 12,
