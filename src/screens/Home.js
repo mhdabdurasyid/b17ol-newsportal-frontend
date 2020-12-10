@@ -1,29 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Container,
-  Text,
-  Thumbnail,
-  Item,
-  Input,
-  Icon,
-  Spinner,
-} from 'native-base';
-import {
-  Image,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import {Container, Text, Item, Input, Icon, Spinner} from 'native-base';
+import {View, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {API_URL} from '@env';
-import dayjs from 'dayjs';
 
 // import actions
 import newsAction from '../redux/actions/news';
 
-// import default avatar
-import User from '../assets/img/avatar.png';
+// import components
+import Card from '../components/card';
 
 export default function Home({navigation}) {
   const dispatch = useDispatch();
@@ -96,44 +80,9 @@ export default function Home({navigation}) {
       <FlatList
         data={data}
         renderItem={({item}) => (
-          <View style={styles.card}>
-            <View style={[styles.author, styles.padding]}>
-              <Thumbnail
-                small
-                source={
-                  item.Author.photo !== null
-                    ? {uri: `${API_URL}${item.Author.photo}`}
-                    : User
-                }
-                style={styles.avatar}
-              />
-              <View>
-                <Text style={[styles.fontSize_12, styles.bold]}>
-                  {item.Author.name}
-                </Text>
-                <Text style={styles.fontSize_12}>
-                  {dayjs(item.createdAt).format('D MMM YYYY HH.mm')}
-                </Text>
-              </View>
-            </View>
-            <Image
-              source={{uri: `${API_URL}${item.image}`}}
-              style={styles.newsImage}
-            />
-            <View style={styles.padding}>
-              <TouchableOpacity onPress={() => readNewsDetail(item.id)}>
-                <Text style={[styles.bold, styles.marginBottom_8]}>
-                  {item.title}
-                </Text>
-              </TouchableOpacity>
-              <Text
-                numberOfLines={2}
-                ellipsizeMode="tail"
-                style={styles.fontSize_14}>
-                {item.content}
-              </Text>
-            </View>
-          </View>
+          <TouchableOpacity onPress={() => readNewsDetail(item.id)}>
+            <Card item={item} />
+          </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id.toString()}
         onEndReached={async () => await loadMore()}
@@ -149,60 +98,16 @@ const styles = StyleSheet.create({
   parent: {
     backgroundColor: '#F7F7F7',
   },
-  bold: {
-    fontWeight: 'bold',
-  },
-  center: {
-    textAlign: 'center',
-  },
   fontSize_14: {
     fontSize: 14,
-  },
-  fontSize_12: {
-    fontSize: 12,
-  },
-  author: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatar: {
-    marginRight: 10,
-  },
-  newsImage: {
-    resizeMode: 'cover',
-    width: '100%',
-    height: 175,
-    marginTop: 10,
-    marginBottom: 8,
-  },
-  marginBottom_8: {
-    marginBottom: 8,
   },
   padding: {
     paddingLeft: 16,
     paddingRight: 16,
   },
-  card: {
-    paddingBottom: 10,
-    paddingTop: 10,
-    backgroundColor: 'white',
-    borderRadius: 1,
-    borderWidth: 0.1,
-    marginBottom: 16,
-  },
   searchbar: {
     backgroundColor: 'white',
     marginBottom: 4,
-  },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  pageBtn: {
-    borderRadius: 100,
-    backgroundColor: '#2395FF',
   },
   isError: {
     justifyContent: 'center',
