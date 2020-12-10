@@ -18,6 +18,7 @@ import MyArticle from './MyArticle';
 import EditArticle from './EditArticle';
 import Profile from './Profile';
 import EditProfile from './EditProfile';
+import EditPassword from './EditPassword';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -152,6 +153,11 @@ export default function Main() {
           <MainStack.Screen
             name="Edit_Profile"
             component={EditProfile}
+            options={{headerShown: false}}
+          />
+          <MainStack.Screen
+            name="EditPassword"
+            component={EditPassword}
             options={{headerShown: false}}
           />
         </MainStack.Navigator>

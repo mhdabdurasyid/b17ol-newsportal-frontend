@@ -70,7 +70,7 @@ export default function Profile({navigation}) {
           </View>
         </View>
         <List style={styles.listMargin}>
-          <ListItem>
+          <ListItem onPress={() => navigation.navigate('EditPassword')}>
             <Left>
               <Text style={styles.bold}>Change Password</Text>
             </Left>
