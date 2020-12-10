@@ -71,9 +71,11 @@ export default function EditProfile({navigation}) {
 
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
-        Alert.alert("You didn't select any image");
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+      } else if (response.fileSize > 500 * 1024) {
+        Alert.alert(
+          'Failed to pick image!',
+          'Please choose image with file size less than 500 KB.',
+        );
       } else {
         const source = {
           uri: response.uri,
