@@ -18,3 +18,6 @@ An app to read news or article. Registered user can create, edit or delete their
 2. Type `yarn install`
 3. Turn on Android emulator or connect your physical device with USB debugging enabled
 4. Type `npx react-native run-android`
+
+## App screenshots
+<img src='https://drive.google.com/uc?id=1-3L4FUT9DFl7aEOYvhEooy5bj4a4j73k' width='25%'> <img src='https://drive.google.com/uc?id=187a564eY6jk58cS2U9yiPcDzNR3psLEP' width='25%'> <img src='https://drive.google.com/uc?id=1zgjt9cDezgJrS6SIPGhPHgKHpIwlf7KA' width='25%'>
